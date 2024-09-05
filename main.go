@@ -1,14 +1,33 @@
 package main
 
 func main() {
-	cards := newDeckFromFile("cards")
-	cards.shuffle()
+	// declare variables for cards and hand
+	// cards: the cards still in the deck available
+	// hand: your hand of cards
+	var cards deck
+	var hand deck
 
-	hand := newDeckFromFile("hand")
+	cardsFilePath := "cards"
+	handFilePath := "hand"
+
+	// check if the cards file exists locally
+	if checkIfFileOrDirectoryExists(cardsFilePath) == nil {
+		cards = newDeckFromFile(cardsFilePath)
+	} else {
+		cards = newDeck()
+	}
+
+	if checkIfFileOrDirectoryExists(handFilePath) == nil {
+		hand = newDeckFromFile(handFilePath)
+	} else {
+		hand, cards = deal(cards, 5)
+	}
+
+	cards.shuffle()
 
 	cards.print()
 	hand.print()
 
-	hand.saveToFile("hand")
-	cards.saveToFile("cards")
+	cards.saveToFile(cardsFilePath)
+	hand.saveToFile(handFilePath)
 }
